@@ -1,5 +1,6 @@
 
 import WelcomeCard from "@/components/dashboard/WelcomeCard";
+import QuickGlance from "@/components/dashboard/QuickGlance";
 import UpcomingTasks from "@/components/dashboard/UpcomingTasks";
 import StudyStats from "@/components/dashboard/StudyStats";
 import FocusSession from "@/components/dashboard/FocusSession";
@@ -14,6 +15,10 @@ const Dashboard = () => {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div className="md:col-span-2">
           <WelcomeCard />
+        </div>
+        
+        <div className="md:col-span-2 lg:col-span-3">
+          <QuickGlance />
         </div>
         
         <div>
