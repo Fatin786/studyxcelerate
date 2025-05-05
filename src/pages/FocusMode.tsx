@@ -7,16 +7,14 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import FocusTimer from "@/components/focus/FocusTimer";
-import DistractionBlocker from "@/components/focus/DistractionBlocker";
 import SessionSettings from "@/components/focus/SessionSettings";
 import AmbientSounds from "@/components/focus/AmbientSounds";
 import { toast } from "sonner";
-import { Headphones, Focus, Calendar, BellOff, Volume2, Timer } from "lucide-react";
+import { Headphones, Focus, Calendar, Volume2, Timer } from "lucide-react";
 
 const FocusMode = () => {
   const [isActive, setIsActive] = useState(false);
   const [activeTab, setActiveTab] = useState("timer");
-  const [blockEnabled, setBlockEnabled] = useState(true);
   const [ambienceEnabled, setAmbienceEnabled] = useState(true);
   const [sessionLength, setSessionLength] = useState(25);
   const [breakLength, setBreakLength] = useState(5);
@@ -94,18 +92,6 @@ const FocusMode = () => {
                   <CardContent className="space-y-4">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <BellOff className="h-5 w-5 text-gold-400" />
-                        <Label htmlFor="block-distractions">Block Distractions</Label>
-                      </div>
-                      <Switch
-                        id="block-distractions"
-                        checked={blockEnabled}
-                        onCheckedChange={setBlockEnabled}
-                      />
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
                         <Volume2 className="h-5 w-5 text-gold-400" />
                         <Label htmlFor="ambient-sound">Ambient Sound</Label>
                       </div>
@@ -149,10 +135,6 @@ const FocusMode = () => {
                 <TabsTrigger value="timer">
                   <Timer className="h-4 w-4 mr-2" />
                   Timer
-                </TabsTrigger>
-                <TabsTrigger value="block">
-                  <BellOff className="h-4 w-4 mr-2" />
-                  Distractions
                 </TabsTrigger>
                 <TabsTrigger value="ambient">
                   <Headphones className="h-4 w-4 mr-2" />
@@ -208,10 +190,6 @@ const FocusMode = () => {
                     </CardContent>
                   </Card>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="block">
-                <DistractionBlocker blockEnabled={blockEnabled} setBlockEnabled={setBlockEnabled} />
               </TabsContent>
               
               <TabsContent value="ambient">
