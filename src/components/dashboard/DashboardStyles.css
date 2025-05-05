@@ -1,0 +1,48 @@
+
+.dashboard-item {
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-item-edit {
+  position: relative;
+  outline: 1px dashed rgba(255, 215, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.drag-handle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  cursor: move;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px 4px 0 0;
+}
+
+.drag-indicator {
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-mode .react-grid-item {
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: rgba(255, 215, 0, 0.2);
+  border: 1px dashed rgba(255, 215, 0, 0.8);
+  border-radius: 4px;
+  opacity: 0.7;
+  transition: all 0.15s ease-out;
+}
+
+.golden-glow {
+  box-shadow: 0 0 8px 2px rgba(255, 215, 0, 0.2);
+}
