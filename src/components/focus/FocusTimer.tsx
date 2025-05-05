@@ -1,0 +1,209 @@
+
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Play, Pause, RotateCcw, Timer, Volume2, BrainCircuit } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
+
+interface FocusTimerProps {
+  sessionLength: number;
+  breakLength: number;
+  isActive: boolean;
+}
+
+const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) => {
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [isBreak, setIsBreak] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(sessionLength * 60);
+  const [progress, setProgress] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [sessions, setSessions] = useState(0);
+  const sessionSeconds = sessionLength * 60;
+  const breakSeconds = breakLength * 60;
+  
+  // Reset timer when session length changes
+  useEffect(() => {
+    if (!timerRunning) {
+      if (isBreak) {
+        setTimeLeft(breakLength * 60);
+      } else {
+        setTimeLeft(sessionLength * 60);
+      }
+    }
+  }, [sessionLength, breakLength, isBreak, timerRunning]);
+
+  // Timer effect
+  useEffect(() => {
+    let timer: number | null = null;
+    
+    if (timerRunning) {
+      timer = window.setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            // Timer complete
+            clearInterval(timer!);
+            setTimerRunning(false);
+            
+            // Play sound if enabled
+            if (soundEnabled) {
+              // This would play a sound in a real implementation
+              console.log("Timer complete sound played");
+            }
+            
+            // Show toast notification
+            if (isBreak) {
+              toast.info("Break finished!", { 
+                description: "Time to get back to work." 
+              });
+              setIsBreak(false);
+              setSessions(prev => prev + 1);
+              return sessionLength * 60;
+            } else {
+              toast.success("Focus session complete!", {
+                description: "Take a well-deserved break."
+              });
+              setIsBreak(true);
+              return breakLength * 60;
+            }
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [timerRunning, isBreak, sessionLength, breakLength, soundEnabled]);
+
+  // Update progress
+  useEffect(() => {
+    const totalSeconds = isBreak ? breakSeconds : sessionSeconds;
+    const progressValue = ((totalSeconds - timeLeft) / totalSeconds) * 100;
+    setProgress(progressValue);
+  }, [timeLeft, sessionSeconds, breakSeconds, isBreak]);
+
+  // Format time as MM:SS
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const toggleTimer = () => {
+    setTimerRunning(!timerRunning);
+  };
+
+  const resetTimer = () => {
+    setTimerRunning(false);
+    if (isBreak) {
+      setTimeLeft(breakLength * 60);
+    } else {
+      setTimeLeft(sessionLength * 60);
+    }
+  };
+
+  return (
+    <Card className={`${isActive ? "glass-morphism" : "bento-card"} ${timerRunning ? "golden-glow" : ""}`}>
+      <CardContent className="p-6">
+        <div className="flex flex-col items-center space-y-6">
+          <div className="flex items-center gap-3">
+            {isBreak ? (
+              <BrainCircuit className="h-6 w-6 text-gold-400" />
+            ) : (
+              <Timer className="h-6 w-6 text-gold-400" />
+            )}
+            <h2 className="text-xl font-semibold">
+              {isBreak ? "Break Time" : "Focus Session"} 
+              {sessions > 0 && !isBreak && ` #${sessions + 1}`}
+            </h2>
+          </div>
+          
+          <div className="relative w-48 h-48 flex items-center justify-center">
+            <svg className="absolute h-full w-full" viewBox="0 0 100 100">
+              <circle
+                className="text-charcoal-800/50"
+                strokeWidth="4"
+                stroke="currentColor"
+                fill="transparent"
+                r="38"
+                cx="50"
+                cy="50"
+              />
+              <circle
+                className={`${isBreak ? "text-emerald-400" : "text-gold-400"} transition-all duration-300`}
+                strokeWidth="4"
+                strokeDasharray={`${progress * 2.38} 238.76`}
+                strokeLinecap="round"
+                stroke="currentColor"
+                fill="transparent"
+                r="38"
+                cx="50"
+                cy="50"
+              />
+            </svg>
+            <div className="text-center z-10">
+              <div className="text-4xl font-bold text-gradient-gold">{formatTime(timeLeft)}</div>
+              <p className="text-sm text-muted-foreground">
+                {isBreak ? "Break time remaining" : "Focus time remaining"}
+              </p>
+            </div>
+          </div>
+          
+          <Progress value={progress} className="w-full h-1.5" />
+          
+          <div className="flex items-center justify-center gap-3">
+            <Button
+              onClick={toggleTimer}
+              className={timerRunning 
+                ? "bg-charcoal-800 hover:bg-charcoal-700 text-white" 
+                : "bg-gold-400 hover:bg-gold-500 text-navy-950"
+              }
+            >
+              {timerRunning ? (
+                <>
+                  <Pause className="mr-2 h-4 w-4" /> Pause
+                </>
+              ) : (
+                <>
+                  <Play className="mr-2 h-4 w-4" /> {progress > 0 ? "Resume" : "Start"}
+                </>
+              )}
+            </Button>
+            
+            <Button 
+              onClick={resetTimer} 
+              variant="outline" 
+              className="border-charcoal-800/30 hover:border-gold-400/50"
+              disabled={!timerRunning && progress === 0}
+            >
+              <RotateCcw className="h-4 w-4" />
+            </Button>
+            
+            <Button 
+              onClick={() => setSoundEnabled(!soundEnabled)} 
+              variant="outline" 
+              className={`border-charcoal-800/30 ${soundEnabled ? "text-gold-400" : ""}`}
+            >
+              <Volume2 className="h-4 w-4" />
+            </Button>
+          </div>
+          
+          {isActive && (
+            <div className="text-sm font-medium text-muted-foreground">
+              {isBreak ? (
+                <span>Take a moment to rest and recharge</span>
+              ) : (
+                <span>Stay focused and present in this moment</span>
+              )}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default FocusTimer;

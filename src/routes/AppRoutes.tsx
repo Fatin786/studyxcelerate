@@ -5,13 +5,14 @@ import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import UnderConstruction from "@/pages/UnderConstruction";
 import StudyPlanner from "@/pages/StudyPlanner";
+import FocusMode from "@/pages/FocusMode";
 
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Layout />}>
       <Route index element={<Index />} />
       <Route path="/planner" element={<StudyPlanner />} />
-      <Route path="/focus" element={<UnderConstruction />} />
+      <Route path="/focus" element={<FocusMode />} />
       <Route path="/materials" element={<UnderConstruction />} />
       <Route path="/progress" element={<UnderConstruction />} />
       <Route path="/ai-assistant" element={<UnderConstruction />} />

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Link } from "react-router-dom";
 
 const FocusSession = () => {
   const [isActive, setIsActive] = useState(false);
@@ -88,6 +89,15 @@ const FocusSession = () => {
             <RotateCcw className="h-4 w-4" />
           </Button>
         </div>
+
+        <Link to="/focus">
+          <Button
+            variant="outline"
+            className="w-full mt-2 border-gold-400/20 hover:bg-gold-400/10 text-gold-400"
+          >
+            Open Full Focus Mode
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   );
