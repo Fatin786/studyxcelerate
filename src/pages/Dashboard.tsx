@@ -9,30 +9,37 @@ import FocusSession from "@/components/dashboard/FocusSession";
 import RecommendedCard from "@/components/dashboard/RecommendedCard";
 import StudyStreak from "@/components/dashboard/StudyStreak";
 import StudyResourcesCard from "@/components/dashboard/StudyResourcesCard";
-import DraggableDashboard from "@/components/dashboard/DraggableDashboard";
-import "@/components/dashboard/DashboardStyles.css";
 
 const Dashboard = () => {
-  // Add a class to the body to ensure proper styling for the grid
-  useEffect(() => {
-    document.body.classList.add('dashboard-page');
-    return () => {
-      document.body.classList.remove('dashboard-page');
-    };
-  }, []);
-
   return (
-    <DraggableDashboard>
-      <WelcomeCard />
+    <div className="space-y-4">
+      <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+      
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div className="md:col-span-8">
+          <WelcomeCard />
+        </div>
+        <div className="md:col-span-4">
+          {/* Empty column for balance */}
+        </div>
+      </div>
+      
       <QuickStats />
+      
       <QuickGlance />
-      <StudyStreak />
-      <StudyStats />
-      <FocusSession />
-      <UpcomingTasks />
-      <RecommendedCard />
-      <StudyResourcesCard />
-    </DraggableDashboard>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <StudyStreak />
+        <StudyStats />
+        <FocusSession />
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <UpcomingTasks />
+        <RecommendedCard />
+        <StudyResourcesCard />
+      </div>
+    </div>
   );
 };
 
