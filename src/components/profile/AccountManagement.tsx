@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Lock, CreditCard, Wallet, Calendar, Clock, CheckCircle2, AlertCircle, Shield, Star, Users, Zap, KeySquare, ExternalLink } from "lucide-react";
+import { Lock, CreditCard, Wallet, Calendar, Clock, CheckCircle2, AlertCircle, Shield, Star, Users, Zap, KeySquare, ExternalLink, AlertTriangle } from "lucide-react";
 
 const AccountManagement = () => {
   return (
