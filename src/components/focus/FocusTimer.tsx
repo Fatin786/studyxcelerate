@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, RotateCcw, Timer, Volume2, BrainCircuit } from "lucide-react";
+import { Play, Pause, RotateCcw, Timer, Volume2, BrainCircuit, Sparkles } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 
@@ -19,6 +19,8 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
   const [progress, setProgress] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [sessions, setSessions] = useState(0);
+  const [startAnimation, setStartAnimation] = useState(false); // For start animation
+  const [endAnimation, setEndAnimation] = useState(false); // For end animation
   const sessionSeconds = sessionLength * 60;
   const breakSeconds = breakLength * 60;
   
@@ -44,6 +46,12 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
             // Timer complete
             clearInterval(timer!);
             setTimerRunning(false);
+            setEndAnimation(true); // Trigger end animation
+            
+            // Reset end animation after a delay
+            setTimeout(() => {
+              setEndAnimation(false);
+            }, 2000);
             
             // Play sound if enabled
             if (soundEnabled) {
@@ -93,6 +101,11 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
   };
 
   const toggleTimer = () => {
+    if (!timerRunning) {
+      // Starting the timer
+      setStartAnimation(true);
+      setTimeout(() => setStartAnimation(false), 800);
+    }
     setTimerRunning(!timerRunning);
   };
 
@@ -105,8 +118,26 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
     }
   };
 
+  // Determine glow effect based on progress
+  const getGlowEffect = () => {
+    if (endAnimation) return "animate-pulse golden-glow shadow-[0_0_25px_rgba(255,215,0,0.4)]";
+    if (timerRunning) {
+      if (progress > 75) return "golden-glow shadow-[0_0_20px_rgba(255,215,0,0.35)]";
+      if (progress > 50) return "golden-glow shadow-[0_0_15px_rgba(255,215,0,0.3)]";
+      return "golden-glow";
+    }
+    return "";
+  };
+
   return (
-    <Card className={`${isActive ? "glass-morphism" : "bento-card"} ${timerRunning ? "golden-glow" : ""}`}>
+    <Card 
+      className={`${isActive ? "glass-morphism" : "bento-card"} 
+        ${getGlowEffect()}
+        transition-all duration-300
+        ${startAnimation ? "scale-105" : ""}
+        ${endAnimation ? "animate-pulse" : ""}
+      `}
+    >
       <CardContent className="p-6">
         <div className="flex flex-col items-center space-y-6">
           <div className="flex items-center gap-3">
@@ -144,12 +175,29 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
                 cy="50"
               />
             </svg>
+            
+            {/* Animated "aura" glow for deep focus */}
+            {timerRunning && !isBreak && (
+              <div className={`absolute inset-0 rounded-full blur-md opacity-20 ${
+                progress > 75 ? "bg-gold-400 animate-pulse" :
+                progress > 50 ? "bg-gold-400/80" :
+                progress > 25 ? "bg-gold-400/60" : "bg-gold-400/40"
+              }`} />
+            )}
+            
             <div className="text-center z-10">
               <div className="text-4xl font-bold text-gradient-gold">{formatTime(timeLeft)}</div>
               <p className="text-sm text-muted-foreground">
                 {isBreak ? "Break time remaining" : "Focus time remaining"}
               </p>
             </div>
+            
+            {/* Show special effects for milestones */}
+            {progress >= 75 && timerRunning && !isBreak && (
+              <div className="absolute top-0 right-0">
+                <Sparkles className="h-5 w-5 text-gold-400 animate-pulse" />
+              </div>
+            )}
           </div>
           
           <Progress value={progress} className="w-full h-1.5" />
@@ -157,10 +205,10 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
           <div className="flex items-center justify-center gap-3">
             <Button
               onClick={toggleTimer}
-              className={timerRunning 
+              className={`transition-all duration-300 transform hover:scale-105 ${timerRunning 
                 ? "bg-charcoal-800 hover:bg-charcoal-700 text-white" 
                 : "bg-gold-400 hover:bg-gold-500 text-navy-950"
-              }
+              }`}
             >
               {timerRunning ? (
                 <>
@@ -176,7 +224,7 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
             <Button 
               onClick={resetTimer} 
               variant="outline" 
-              className="border-charcoal-800/30 hover:border-gold-400/50"
+              className="border-charcoal-800/30 hover:border-gold-400/50 transition-all duration-300 transform hover:scale-105"
               disabled={!timerRunning && progress === 0}
             >
               <RotateCcw className="h-4 w-4" />
@@ -185,7 +233,7 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
             <Button 
               onClick={() => setSoundEnabled(!soundEnabled)} 
               variant="outline" 
-              className={`border-charcoal-800/30 ${soundEnabled ? "text-gold-400" : ""}`}
+              className={`border-charcoal-800/30 ${soundEnabled ? "text-gold-400" : ""} transition-all duration-300 transform hover:scale-105`}
             >
               <Volume2 className="h-4 w-4" />
             </Button>
@@ -198,6 +246,16 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
               ) : (
                 <span>Stay focused and present in this moment</span>
               )}
+            </div>
+          )}
+          
+          {/* Display confetti animation on session completion */}
+          {endAnimation && !isBreak && (
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {/* This would be replaced with actual confetti animation in a real implementation */}
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <Sparkles className="h-8 w-8 text-gold-400 animate-pulse" />
+              </div>
             </div>
           )}
         </div>

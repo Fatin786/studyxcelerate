@@ -9,8 +9,9 @@ import { Label } from "@/components/ui/label";
 import FocusTimer from "@/components/focus/FocusTimer";
 import SessionSettings from "@/components/focus/SessionSettings";
 import AmbientSounds from "@/components/focus/AmbientSounds";
+import FocusBackgrounds, { BackgroundTheme, getBackgroundClasses, backgroundThemes } from "@/components/focus/FocusBackgrounds";
 import { toast } from "sonner";
-import { Headphones, Focus, Calendar, Volume2, Timer } from "lucide-react";
+import { Headphones, Focus, Calendar, Volume2, Timer, Palette } from "lucide-react";
 
 const FocusMode = () => {
   const [isActive, setIsActive] = useState(false);
@@ -18,6 +19,33 @@ const FocusMode = () => {
   const [ambienceEnabled, setAmbienceEnabled] = useState(true);
   const [sessionLength, setSessionLength] = useState(25);
   const [breakLength, setBreakLength] = useState(5);
+  const [selectedThemeId, setSelectedThemeId] = useState("auto");
+  const [timeBasedThemeId, setTimeBasedThemeId] = useState("night");
+  
+  // Update time-based theme
+  useEffect(() => {
+    const updateTimeBasedTheme = () => {
+      const hour = new Date().getHours();
+      let themeId = "night";
+      
+      if (hour >= 6 && hour < 10) {
+        themeId = "sunrise";
+      } else if (hour >= 10 && hour < 17) {
+        themeId = "forest";
+      } else if (hour >= 17 && hour < 20) {
+        themeId = "sunrise"; // sunset
+      } else {
+        themeId = "night";
+      }
+      
+      setTimeBasedThemeId(themeId);
+    };
+    
+    updateTimeBasedTheme();
+    const interval = setInterval(updateTimeBasedTheme, 60000); // Check every minute
+    
+    return () => clearInterval(interval);
+  }, []);
   
   // Enter focus mode
   const startFocusMode = () => {
@@ -44,9 +72,24 @@ const FocusMode = () => {
     // Exit fullscreen
     // if (document.fullscreenElement) document.exitFullscreen();
   };
+
+  // Handle theme selection  
+  const handleThemeSelect = (theme: BackgroundTheme) => {
+    setSelectedThemeId(theme.id);
+    
+    // If the theme has an associated sound preset, automatically enable ambience
+    if (theme.soundPreset && !ambienceEnabled) {
+      setAmbienceEnabled(true);
+      toast.info(`${theme.name} theme enabled with ${theme.soundPreset} sounds`);
+    } else {
+      toast.info(`${theme.name} theme selected`);
+    }
+  };
+  
+  const backgroundClasses = getBackgroundClasses(selectedThemeId, isActive, timeBasedThemeId);
   
   return (
-    <div className={`transition-all duration-500 ${isActive ? "bg-navy-950" : ""}`}>
+    <div className={`transition-all duration-500 min-h-screen ${backgroundClasses}`}>
       {/* Floating Focus Button */}
       <Button
         onClick={() => isActive ? endFocusMode() : startFocusMode()}
@@ -59,7 +102,7 @@ const FocusMode = () => {
         <Focus className="h-6 w-6" />
       </Button>
 
-      <div className="space-y-6">
+      <div className="space-y-6 p-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold tracking-tight">Focus Mode</h1>
           <div className="flex items-center gap-2">
@@ -84,7 +127,7 @@ const FocusMode = () => {
                 />
               </div>
               
-              <div className="lg:col-span-4">
+              <div className="lg:col-span-4 space-y-4">
                 <Card className="bg-charcoal-950/70 backdrop-blur-sm border border-white/5">
                   <CardHeader>
                     <CardTitle className="text-lg font-medium">Quick Controls</CardTitle>
@@ -116,6 +159,18 @@ const FocusMode = () => {
                       />
                     </div>
                     
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <Palette className="h-5 w-5 text-gold-400" />
+                        <Label>Background Theme</Label>
+                      </div>
+                      <FocusBackgrounds 
+                        isActive={isActive}
+                        selectedThemeId={selectedThemeId}
+                        onSelectTheme={handleThemeSelect}
+                      />
+                    </div>
+                    
                     <Button 
                       className="w-full bg-gold-400 hover:bg-gold-500 text-navy-950"
                       onClick={() => setActiveTab("settings")}
@@ -139,6 +194,10 @@ const FocusMode = () => {
                 <TabsTrigger value="ambient">
                   <Headphones className="h-4 w-4 mr-2" />
                   Ambient
+                </TabsTrigger>
+                <TabsTrigger value="themes">
+                  <Palette className="h-4 w-4 mr-2" />
+                  Themes
                 </TabsTrigger>
                 <TabsTrigger value="settings">
                   <Calendar className="h-4 w-4 mr-2" />
@@ -194,6 +253,41 @@ const FocusMode = () => {
               
               <TabsContent value="ambient">
                 <AmbientSounds />
+              </TabsContent>
+              
+              <TabsContent value="themes">
+                <Card className="bento-card">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-medium">Background Themes</CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Choose your ideal focus environment
+                    </p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <FocusBackgrounds 
+                          isActive={isActive}
+                          selectedThemeId={selectedThemeId}
+                          onSelectTheme={handleThemeSelect}
+                        />
+                      </div>
+                      
+                      <div className="rounded-lg overflow-hidden h-48">
+                        <div className={`w-full h-full ${getBackgroundClasses(selectedThemeId, true, timeBasedThemeId)} flex items-center justify-center`}>
+                          <div className="text-center p-4 backdrop-blur-sm bg-black/30 rounded-lg">
+                            <p className="font-medium text-white">Theme Preview</p>
+                            <p className="text-xs text-white/70">
+                              {selectedThemeId === "auto" 
+                                ? "Changes based on time of day" 
+                                : backgroundThemes.find(t => t.id === selectedThemeId)?.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </TabsContent>
               
               <TabsContent value="settings">
