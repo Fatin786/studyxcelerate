@@ -8,6 +8,7 @@ import StudyPlanner from "@/pages/StudyPlanner";
 import FocusMode from "@/pages/FocusMode";
 import ProgressTracker from "@/pages/ProgressTracker";
 import StudyMaterials from "@/pages/StudyMaterials";
+import Profile from "@/pages/Profile";
 
 const AppRoutes = () => (
   <Routes>
@@ -18,7 +19,7 @@ const AppRoutes = () => (
       <Route path="/materials" element={<StudyMaterials />} />
       <Route path="/progress" element={<ProgressTracker />} />
       <Route path="/ai-assistant" element={<UnderConstruction />} />
-      <Route path="/profile" element={<UnderConstruction />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/settings" element={<UnderConstruction />} />
     </Route>
     <Route path="*" element={<NotFound />} />
