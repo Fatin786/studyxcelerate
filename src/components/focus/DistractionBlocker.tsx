@@ -135,7 +135,6 @@ const DistractionBlocker = ({ blockEnabled, setBlockEnabled }: DistractionBlocke
                       <Switch 
                         checked={distraction.enabled} 
                         onCheckedChange={() => toggleDistraction(index)}
-                        size="sm"
                       />
                       <Button 
                         variant="ghost" 
