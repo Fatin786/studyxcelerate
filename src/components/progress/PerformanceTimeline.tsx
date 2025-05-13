@@ -100,96 +100,99 @@ const PerformanceTimeline = () => {
         config={chartConfig}
         className="aspect-auto h-full w-full"
       >
-        <ResponsiveContainer width="100%" height="90%">
-          <AreaChart
-            data={performanceData}
-            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="quizGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.1} />
-              </linearGradient>
-              <linearGradient id="timeGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} />
-            <XAxis
-              dataKey="date"
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              padding={{ left: 10, right: 10 }}
-            />
-            <YAxis
-              yAxisId="left"
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              domain={[0, 100]}
-              tickFormatter={(value) => `${value}%`}
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              stroke="#888888"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              domain={[0, 120]}
-              tickFormatter={(value) => `${value}m`}
-            />
-            <ChartTooltip
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  const data = payload[0].payload;
-                  return (
-                    <ChartTooltipContent>
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium">{data.date}</p>
-                        <div className="flex items-center space-x-2">
-                          <div className="rounded-full h-3 w-3 bg-amber-500" />
-                          <p className="text-sm">Performance: {data.quizPerformance}%</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="rounded-full h-3 w-3 bg-blue-500" />
-                          <p className="text-sm">Time Spent: {data.timeSpent} minutes</p>
-                        </div>
-                        {data.milestone && (
-                          <div className="pt-1 mt-1 border-t border-border">
-                            <Badge className="bg-gold-400 text-navy-950">Milestone</Badge>
-                            <p className="text-xs mt-1">{data.milestone}</p>
+        {/* Wrap the ResponsiveContainer in a function to ensure it renders as a single element */}
+        {() => (
+          <ResponsiveContainer width="100%" height="90%">
+            <AreaChart
+              data={performanceData}
+              margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="quizGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.1} />
+                </linearGradient>
+                <linearGradient id="timeGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.2} />
+              <XAxis
+                dataKey="date"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                padding={{ left: 10, right: 10 }}
+              />
+              <YAxis
+                yAxisId="left"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                domain={[0, 100]}
+                tickFormatter={(value) => `${value}%`}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                stroke="#888888"
+                fontSize={12}
+                tickLine={false}
+                axisLine={false}
+                domain={[0, 120]}
+                tickFormatter={(value) => `${value}m`}
+              />
+              <ChartTooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <ChartTooltipContent>
+                        <div className="space-y-1">
+                          <p className="text-sm font-medium">{data.date}</p>
+                          <div className="flex items-center space-x-2">
+                            <div className="rounded-full h-3 w-3 bg-amber-500" />
+                            <p className="text-sm">Performance: {data.quizPerformance}%</p>
                           </div>
-                        )}
-                      </div>
-                    </ChartTooltipContent>
-                  );
-                }
-                return null;
-              }}
-            />
-            <Area
-              type="monotone"
-              dataKey="quizPerformance"
-              yAxisId="left"
-              stroke="#f59e0b"
-              fillOpacity={1}
-              fill="url(#quizGradient)"
-            />
-            <Area
-              type="monotone"
-              dataKey="timeSpent"
-              yAxisId="right"
-              stroke="#3b82f6"
-              fillOpacity={1}
-              fill="url(#timeGradient)"
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+                          <div className="flex items-center space-x-2">
+                            <div className="rounded-full h-3 w-3 bg-blue-500" />
+                            <p className="text-sm">Time Spent: {data.timeSpent} minutes</p>
+                          </div>
+                          {data.milestone && (
+                            <div className="pt-1 mt-1 border-t border-border">
+                              <Badge className="bg-gold-400 text-navy-950">Milestone</Badge>
+                              <p className="text-xs mt-1">{data.milestone}</p>
+                            </div>
+                          )}
+                        </div>
+                      </ChartTooltipContent>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="quizPerformance"
+                yAxisId="left"
+                stroke="#f59e0b"
+                fillOpacity={1}
+                fill="url(#quizGradient)"
+              />
+              <Area
+                type="monotone"
+                dataKey="timeSpent"
+                yAxisId="right"
+                stroke="#3b82f6"
+                fillOpacity={1}
+                fill="url(#timeGradient)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        )}
         
         <ChartLegend>
           <ChartLegendContent className="mt-3" />

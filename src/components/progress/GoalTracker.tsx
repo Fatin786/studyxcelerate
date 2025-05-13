@@ -130,8 +130,7 @@ const GoalTracker: React.FC<GoalTrackerProps> = ({ detailed = false }) => {
             
             <Progress
               value={goal.progress}
-              className="h-1.5"
-              indicatorClassName={getProgressColor(goal.progress)}
+              className={cn("h-1.5", getProgressColor(goal.progress))}
             />
             
             {detailed && (

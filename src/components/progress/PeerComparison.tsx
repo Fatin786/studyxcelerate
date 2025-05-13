@@ -140,8 +140,7 @@ const PeerComparison = () => {
                         </div>
                         <Progress 
                           value={peer.taskCompletion} 
-                          className="h-1"
-                          indicatorClassName={peer.isYou ? "bg-gold-400" : ""}
+                          className={cn("h-1", peer.isYou ? "bg-gold-400" : "")}
                         />
                       </div>
                       <div>
@@ -151,8 +150,7 @@ const PeerComparison = () => {
                         </div>
                         <Progress 
                           value={peer.quizAverage} 
-                          className="h-1"
-                          indicatorClassName={peer.isYou ? "bg-gold-400" : ""}
+                          className={cn("h-1", peer.isYou ? "bg-gold-400" : "")}
                         />
                       </div>
                     </div>
