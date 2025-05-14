@@ -5,7 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Mood } from "lucide-react";
+import { Smile } from "lucide-react";
 
 const MoodWellnessTracking = () => {
   const { toast } = useToast();
@@ -14,7 +14,7 @@ const MoodWellnessTracking = () => {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-2">
-          <Mood className="h-5 w-5 text-gold-400" />
+          <Smile className="h-5 w-5 text-gold-400" />
           <CardTitle>Mood & Wellness Tracking</CardTitle>
         </div>
         <CardDescription>

@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -7,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Language } from "lucide-react";
+import { Languages } from "lucide-react";
 
 const LanguageRegion = () => {
   const { toast } = useToast();
@@ -23,7 +22,7 @@ const LanguageRegion = () => {
     <Card>
       <CardHeader>
         <div className="flex items-center gap-2">
-          <Language className="h-5 w-5 text-gold-400" />
+          <Languages className="h-5 w-5 text-gold-400" />
           <CardTitle>Language & Region</CardTitle>
         </div>
         <CardDescription>
