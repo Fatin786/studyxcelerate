@@ -12,7 +12,7 @@ const Layout = () => {
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       <div className="flex flex-1 flex-col">
         <Header />
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <main className="flex-1 p-4 lg:p-6 overflow-auto bg-navy-900/10">
           <Outlet />
         </main>
       </div>
