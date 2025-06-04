@@ -39,7 +39,7 @@ const Dashboard = () => {
         <ClickSpark sparkColor="#fbbf24" sparkCount={6} sparkRadius={15} duration={500}>
           <StudyStreak />
         </ClickSpark>
-        <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500">
+        <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
           <StudyStats />
         </ClickSpark>
         <ClickSpark sparkColor="#fbbf24" sparkCount={10} sparkRadius={18} duration={600}>
@@ -51,10 +51,10 @@ const Dashboard = () => {
         <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
           <UpcomingTasks />
         </ClickSpark>
-        <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500">
+        <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
           <RecommendedCard />
         </ClickSpark>
-        <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500">
+        <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
           <StudyResourcesCard />
         </ClickSpark>
       </div>
