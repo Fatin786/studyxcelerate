@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw, Timer, Volume2, BrainCircuit, Sparkles } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { useSessionTracking } from "@/hooks/useSessionTracking";
+import SessionCompletionDialog from "./SessionCompletionDialog";
 
 interface FocusTimerProps {
   sessionLength: number;
@@ -19,10 +21,14 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
   const [progress, setProgress] = useState(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [sessions, setSessions] = useState(0);
-  const [startAnimation, setStartAnimation] = useState(false); // For start animation
-  const [endAnimation, setEndAnimation] = useState(false); // For end animation
+  const [startAnimation, setStartAnimation] = useState(false);
+  const [endAnimation, setEndAnimation] = useState(false);
+  const [showCompletionDialog, setShowCompletionDialog] = useState(false);
   const sessionSeconds = sessionLength * 60;
   const breakSeconds = breakLength * 60;
+  
+  // Session tracking
+  const sessionTracker = useSessionTracking();
   
   // Reset timer when session length changes
   useEffect(() => {
@@ -68,9 +74,8 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
               setSessions(prev => prev + 1);
               return sessionLength * 60;
             } else {
-              toast.success("Focus session complete!", {
-                description: "Take a well-deserved break."
-              });
+              // Focus session completed - show completion dialog
+              setShowCompletionDialog(true);
               setIsBreak(true);
               return breakLength * 60;
             }
@@ -105,6 +110,11 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
       // Starting the timer
       setStartAnimation(true);
       setTimeout(() => setStartAnimation(false), 800);
+      
+      // Start session tracking
+      if (!isBreak) {
+        sessionTracker.startSession("General Study", "Focus Mode");
+      }
     }
     setTimerRunning(!timerRunning);
   };
@@ -260,6 +270,23 @@ const FocusTimer = ({ sessionLength, breakLength, isActive }: FocusTimerProps) =
           )}
         </div>
       </CardContent>
+
+      {/* Session Completion Dialog */}
+      <SessionCompletionDialog
+        open={showCompletionDialog}
+        onOpenChange={setShowCompletionDialog}
+        onSubmit={(energyLevelEnd, qualityRating, notes) => {
+          // Complete the session tracking
+          sessionTracker.endSession(energyLevelEnd, qualityRating);
+          setSessions(prev => prev + 1);
+          
+          toast.success("Session completed!", {
+            description: "Great work! Take a well-deserved break."
+          });
+        }}
+        sessionDuration={Math.round((sessionSeconds - timeLeft) / 60)}
+        focusScore={sessionTracker.currentSession?.focusScore || 85}
+      />
     </Card>
   );
 };

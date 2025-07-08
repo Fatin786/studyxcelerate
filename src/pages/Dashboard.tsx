@@ -9,6 +9,8 @@ import FocusSession from "@/components/dashboard/FocusSession";
 import RecommendedCard from "@/components/dashboard/RecommendedCard";
 import StudyStreak from "@/components/dashboard/StudyStreak";
 import StudyResourcesCard from "@/components/dashboard/StudyResourcesCard";
+import LiveSessionMetrics from "@/components/dashboard/LiveSessionMetrics";
+import SessionHistory from "@/components/dashboard/SessionHistory";
 import ClickSpark from "@/components/ui/ClickSpark";
 
 const Dashboard = () => {
@@ -35,22 +37,31 @@ const Dashboard = () => {
         <QuickGlance />
       </ClickSpark>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <ClickSpark sparkColor="#fbbf24" sparkCount={6} sparkRadius={15} duration={500}>
           <StudyStreak />
         </ClickSpark>
         <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
           <StudyStats />
         </ClickSpark>
+        <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
+          <LiveSessionMetrics />
+        </ClickSpark>
         <ClickSpark sparkColor="#fbbf24" sparkCount={10} sparkRadius={18} duration={600}>
           <FocusSession />
         </ClickSpark>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
+          <SessionHistory />
+        </ClickSpark>
         <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
           <UpcomingTasks />
         </ClickSpark>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
           <RecommendedCard />
         </ClickSpark>
