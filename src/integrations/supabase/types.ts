@@ -364,6 +364,236 @@ export type Database = {
         }
         Relationships: []
       }
+      task_dependencies: {
+        Row: {
+          created_at: string
+          dependency_type: string
+          dependent_task_id: string
+          id: string
+          lag_time_hours: number | null
+          prerequisite_task_id: string
+        }
+        Insert: {
+          created_at?: string
+          dependency_type?: string
+          dependent_task_id: string
+          id?: string
+          lag_time_hours?: number | null
+          prerequisite_task_id: string
+        }
+        Update: {
+          created_at?: string
+          dependency_type?: string
+          dependent_task_id?: string
+          id?: string
+          lag_time_hours?: number | null
+          prerequisite_task_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_dependencies_dependent_task_id_fkey"
+            columns: ["dependent_task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_dependencies_prerequisite_task_id_fkey"
+            columns: ["prerequisite_task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      task_sessions: {
+        Row: {
+          challenges_encountered: string | null
+          created_at: string
+          duration_minutes: number | null
+          ended_at: string | null
+          energy_level_end: number | null
+          energy_level_start: number | null
+          focus_score: number | null
+          id: string
+          interruption_count: number | null
+          milestones_completed: Json | null
+          next_steps: string | null
+          productivity_rating: number | null
+          progress_made_percentage: number | null
+          started_at: string
+          task_id: string
+          user_id: string
+        }
+        Insert: {
+          challenges_encountered?: string | null
+          created_at?: string
+          duration_minutes?: number | null
+          ended_at?: string | null
+          energy_level_end?: number | null
+          energy_level_start?: number | null
+          focus_score?: number | null
+          id?: string
+          interruption_count?: number | null
+          milestones_completed?: Json | null
+          next_steps?: string | null
+          productivity_rating?: number | null
+          progress_made_percentage?: number | null
+          started_at?: string
+          task_id: string
+          user_id: string
+        }
+        Update: {
+          challenges_encountered?: string | null
+          created_at?: string
+          duration_minutes?: number | null
+          ended_at?: string | null
+          energy_level_end?: number | null
+          energy_level_start?: number | null
+          focus_score?: number | null
+          id?: string
+          interruption_count?: number | null
+          milestones_completed?: Json | null
+          next_steps?: string | null
+          productivity_rating?: number | null
+          progress_made_percentage?: number | null
+          started_at?: string
+          task_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_sessions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          actual_difficulty: number | null
+          actual_duration_minutes: number | null
+          assignment_weight: number | null
+          blocks_tasks: Json | null
+          completed_at: string | null
+          completion_confidence: number | null
+          course_code: string | null
+          created_at: string
+          depends_on_tasks: Json | null
+          description: string | null
+          due_date: string | null
+          estimated_difficulty: number | null
+          estimated_duration_minutes: number | null
+          goal_id: string | null
+          grade_received: number | null
+          grade_scale: string | null
+          id: string
+          instructor: string | null
+          notes: string | null
+          parent_task_id: string | null
+          priority: string
+          progress_percentage: number | null
+          resources_needed: Json | null
+          started_at: string | null
+          status: string
+          subject_area: string
+          submission_method: string | null
+          success_score: number | null
+          tags: Json | null
+          task_type: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actual_difficulty?: number | null
+          actual_duration_minutes?: number | null
+          assignment_weight?: number | null
+          blocks_tasks?: Json | null
+          completed_at?: string | null
+          completion_confidence?: number | null
+          course_code?: string | null
+          created_at?: string
+          depends_on_tasks?: Json | null
+          description?: string | null
+          due_date?: string | null
+          estimated_difficulty?: number | null
+          estimated_duration_minutes?: number | null
+          goal_id?: string | null
+          grade_received?: number | null
+          grade_scale?: string | null
+          id?: string
+          instructor?: string | null
+          notes?: string | null
+          parent_task_id?: string | null
+          priority?: string
+          progress_percentage?: number | null
+          resources_needed?: Json | null
+          started_at?: string | null
+          status?: string
+          subject_area: string
+          submission_method?: string | null
+          success_score?: number | null
+          tags?: Json | null
+          task_type?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actual_difficulty?: number | null
+          actual_duration_minutes?: number | null
+          assignment_weight?: number | null
+          blocks_tasks?: Json | null
+          completed_at?: string | null
+          completion_confidence?: number | null
+          course_code?: string | null
+          created_at?: string
+          depends_on_tasks?: Json | null
+          description?: string | null
+          due_date?: string | null
+          estimated_difficulty?: number | null
+          estimated_duration_minutes?: number | null
+          goal_id?: string | null
+          grade_received?: number | null
+          grade_scale?: string | null
+          id?: string
+          instructor?: string | null
+          notes?: string | null
+          parent_task_id?: string | null
+          priority?: string
+          progress_percentage?: number | null
+          resources_needed?: Json | null
+          started_at?: string | null
+          status?: string
+          subject_area?: string
+          submission_method?: string | null
+          success_score?: number | null
+          tags?: Json | null
+          task_type?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_parent_task_id_fkey"
+            columns: ["parent_task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

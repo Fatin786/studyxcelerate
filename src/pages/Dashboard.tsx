@@ -11,6 +11,7 @@ import StudyStreak from "@/components/dashboard/StudyStreak";
 import StudyResourcesCard from "@/components/dashboard/StudyResourcesCard";
 import LiveSessionMetrics from "@/components/dashboard/LiveSessionMetrics";
 import SessionHistory from "@/components/dashboard/SessionHistory";
+import TaskManagement from "@/components/dashboard/TaskManagement";
 import ClickSpark from "@/components/ui/ClickSpark";
 
 const Dashboard = () => {
@@ -60,6 +61,10 @@ const Dashboard = () => {
           <UpcomingTasks />
         </ClickSpark>
       </div>
+      
+      <ClickSpark sparkColor="#fbbf24" sparkCount={12} sparkRadius={20} duration={600}>
+        <TaskManagement />
+      </ClickSpark>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ClickSpark sparkColor="#fbbf24" sparkCount={8} sparkRadius={15} duration={500}>
